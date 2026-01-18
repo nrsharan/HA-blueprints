@@ -5,6 +5,7 @@ blueprint:
     Ideal for controlling lights, scripts, or custom hardware like light-control boards.
     '
   domain: automation
+  source_url: https://github.com/aledziko/HA-blueprints/blob/main/IKEA/Matter/ikea-myggspray-e2494/ikea-myggspray-e2494-matter-motion-sensor.yaml
   author: aledziko
   input:
     motion_entity:

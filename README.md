@@ -21,6 +21,7 @@ HA-blueprints/
 ### IKEA MYGGSPRAY E2494 Motion Sensor (Matter)
 - **Description**: Flexible action-based motion automation. Supports arbitrary actions for both motion detected and motion stopped events.
 - **Protocol**: Matter over Thread
+- **Blueprint URL**: [Import Link](https://github.com/aledziko/HA-blueprints/blob/main/IKEA/Matter/ikea-myggspray-e2494/ikea-myggspray-e2494-matter-motion-sensor.yaml)
 - **Key Features**: Trigger any action in HA, customizable wait time delay, and "restart" mode for high reliability.
 
 ## 🛠️ How to Import
@@ -29,7 +30,7 @@ To import these blueprints into your Home Assistant:
 
 1. Go to **Settings > Automations & Scenes > Blueprints**.
 2. Click **Import Blueprint** (bottom right).
-3. Paste the **Raw URL** of the `.yaml` file from this repository.
+3. Paste the **Blueprint URL** provided above.
 4. Click **Preview** and then **Import**.
 
 ## 📄 License
