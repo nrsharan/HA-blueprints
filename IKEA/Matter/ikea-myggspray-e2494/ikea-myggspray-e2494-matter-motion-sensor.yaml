@@ -39,6 +39,7 @@ blueprint:
       default: []
       selector:
         action: {}
+
     # Illuminance Settings
     illuminance_entity:
       name: (Optional) Illuminance Sensor
@@ -88,6 +89,7 @@ blueprint:
       default: []
       selector:
         action: {}
+
     # Battery Settings
     battery_entity:
       name: (Optional) Battery Sensor

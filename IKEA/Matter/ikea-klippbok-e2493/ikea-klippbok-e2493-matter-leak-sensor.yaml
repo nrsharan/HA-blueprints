@@ -8,6 +8,7 @@ blueprint:
   source_url: https://github.com/aledziko/HA-blueprints/blob/main/IKEA/Matter/ikea-klippbok-e2493/ikea-klippbok-e2493-matter-leak-sensor.yaml
   author: aledziko
   input:
+    # Moisture Settings
     moisture_sensor:
       name: KLIPPBOK Leak Sensor
       description: Select the KLIPPBOK leak sensor (binary_sensor).
@@ -38,7 +39,8 @@ blueprint:
       default: []
       selector:
         action: {}
-    # Dry (All Clear) State
+
+    # All Clear Settings
     action_dry_immediate:
       name: "Action: Dry (Immediate)"
       description: Run immediately when the sensor becomes dry.
@@ -60,6 +62,7 @@ blueprint:
       default: []
       selector:
         action: {}
+
     # Battery Settings
     battery_entity:
       name: (Optional) Battery Sensor

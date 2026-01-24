@@ -8,6 +8,7 @@ blueprint:
   source_url: https://github.com/aledziko/HA-blueprints/blob/main/IKEA/Matter/ikea-timmerflotte-e2314/ikea-timmerflotte-e2314-matter-temp-humidity-sensor.yaml
   author: aledziko
   input:
+    # Temperature Settings
     temp_sensor:
       name: Temperature Sensor
       description: Select the temperature sensor entity.
@@ -15,14 +16,6 @@ blueprint:
         entity:
           filter:
             - device_class: temperature
-    humidity_sensor:
-      name: Humidity Sensor
-      description: Select the humidity sensor entity.
-      selector:
-        entity:
-          filter:
-            - device_class: humidity
-    # Temperature Thresholds
     temp_high_threshold:
       name: High Temperature Threshold
       description: Action runs when temperature goes ABOVE this value.
@@ -55,7 +48,15 @@ blueprint:
       default: []
       selector:
         action: {}
-    # Humidity Thresholds
+
+    # Humidity Settings
+    humidity_sensor:
+      name: Humidity Sensor
+      description: Select the humidity sensor entity.
+      selector:
+        entity:
+          filter:
+            - device_class: humidity
     humidity_high_threshold:
       name: High Humidity Threshold
       description: Action runs when humidity goes ABOVE this value.
@@ -88,6 +89,7 @@ blueprint:
       default: []
       selector:
         action: {}
+
     # Battery Settings
     battery_entity:
       name: (Optional) Battery Sensor
