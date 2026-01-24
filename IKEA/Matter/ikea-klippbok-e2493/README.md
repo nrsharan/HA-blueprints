@@ -2,7 +2,11 @@
 
 Full-featured automation for the **IKEA KLIPPBOK E2493** Matter leak sensor. This blueprint provides a highly flexible way to respond to leak detections, with support for immediate alerts, delayed secondary actions (if still wet), all-clear notifications, and integrated battery monitoring.
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint URL pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Faledziko%2FHA-blueprints%2Fblob%2Fmain%2FIKEA%2FMatter%2Fikea-klippbok-e2493%2Fikea-klippbok-e2493-matter-leak-sensor.yaml)
+[![Import Blueprint to My Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Faledziko%2FHA-blueprints%2Fblob%2Fmain%2FIKEA%2FMatter%2Fikea-klippbok-e2493%2Fikea-klippbok-e2493-matter-leak-sensor.yaml)
+
+### 🛠️ Manual Import URL
+If the button above doesn't work, you can copy the URL below and paste it into the "Import Blueprint" dialog in Home Assistant:
+`https://github.com/aledziko/HA-blueprints/blob/main/IKEA/Matter/ikea-klippbok-e2493/ikea-klippbok-e2493-matter-leak-sensor.yaml`
 
 ## 🌟 Key Features
 
@@ -40,4 +44,4 @@ Licensed under the **MIT License**.
 ### 🔗 More Blueprints & Community
 Check out my other blueprints for IKEA Matter devices on the Home Assistant Community:
 
-[**👉 Explore all my blueprints on the HA Forum**](https://community.home-assistant.io/search?q=aledziko%20%23blueprints-exchange)
+[**👉 Explore all my blueprints on the HA Forum**](https://community.home-assistant.io/search?q=@aledziko%20#blueprints-exchange)

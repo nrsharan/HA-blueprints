@@ -5,7 +5,11 @@ Pro-grade automation for the **IKEA ALPSTUGA E2495** Matter Air Quality sensor. 
 > [!NOTE]
 > The **Air Quality** entity is a general "Air Quality Index" (AQI) calculated by the device (usually based on PM2.5 and CO2 levels). While the ALPSTUGA does not have a dedicated VOC sensor, this summary state is a great way to trigger whole-room air clear actions.
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint URL pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Faledziko%2FHA-blueprints%2Fblob%2Fmain%2FIKEA%2FMatter%2Fikea-alpstuga-e2495%2Fikea-alpstuga-e2495-matter-air-quality-sensor.yaml)
+[![Import Blueprint to My Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Faledziko%2FHA-blueprints%2Fblob%2Fmain%2FIKEA%2FMatter%2Fikea-alpstuga-e2495%2Fikea-alpstuga-e2495-matter-air-quality-sensor.yaml)
+
+### 🛠️ Manual Import URL
+If the button above doesn't work, you can copy the URL below and paste it into the "Import Blueprint" dialog in Home Assistant:
+`https://github.com/aledziko/HA-blueprints/blob/main/IKEA/Matter/ikea-alpstuga-e2495/ikea-alpstuga-e2495-matter-air-quality-sensor.yaml`
 
 ## 🌟 Key Features
 
@@ -58,4 +62,4 @@ Licensed under the **MIT License**.
 ### 🔗 More Blueprints & Community
 Check out my other blueprints for IKEA Matter devices on the Home Assistant Community:
 
-[**👉 Explore all my blueprints on the HA Forum**](https://community.home-assistant.io/search?q=aledziko%20%23blueprints-exchange)
+[**👉 Explore all my blueprints on the HA Forum**](https://community.home-assistant.io/search?q=@aledziko%20#blueprints-exchange)
