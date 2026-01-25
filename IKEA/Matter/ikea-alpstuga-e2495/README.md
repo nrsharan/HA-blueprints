@@ -60,7 +60,6 @@ Licensed under the **MIT License**.
 
 ---
 ### ⚠️ Troubleshooting
-### ⚠️ Troubleshooting
 **Preventing Repeated Actions?**
 If you notice actions firing multiple times (e.g., your ventilation toggling on/off or receiving duplicate alerts) even when the air quality is stable, this blueprint has robust filtering built-in:
 *   **Strict Logic**: Actions only trigger if the value actually **crosses** the threshold. If CO2 drops from 798 to 797 (both below the default 800 limit), the automation ignores it.
