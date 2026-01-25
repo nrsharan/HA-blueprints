@@ -44,7 +44,7 @@ blueprint:
     illuminance_entity:
       name: (Optional) Illuminance Sensor
       description: Select the light sensor (sensor.illuminance).
-      default: none
+      default: []
       selector:
         entity:
           filter:
@@ -94,7 +94,7 @@ blueprint:
     battery_entity:
       name: (Optional) Battery Sensor
       description: Select the battery level sensor (sensor.battery).
-      default: none
+      default: []
       selector:
         entity:
           filter:

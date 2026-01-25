@@ -8,11 +8,25 @@ blueprint:
   source_url: https://github.com/aledziko/HA-blueprints/blob/main/IKEA/Matter/ikea-alpstuga-e2495/ikea-alpstuga-e2495-matter-air-quality-sensor.yaml
   author: aledziko
   input:
+    # Global Settings
+    stabilization_time:
+      name: Action Trigger Stabilization Time
+      description: >
+        **Prevent Action Repetition**: This setting ensures the sensor must stay in the new state for X seconds before triggering any action.
+        It filters out brief fluctuations and connection drops (unavailable) that would otherwise cause the same action to run multiple times.
+        Recommended: 15-60 seconds.
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: "sec"
+
     # CO2 Settings
     co2_sensor:
       name: CO2 Sensor
       description: Select the CO2 sensor entity (numeric).
-      default: none
+      default: []
       selector:
         entity:
           filter:
@@ -52,7 +66,7 @@ blueprint:
     pm25_sensor:
       name: PM2.5 Sensor
       description: Select the PM2.5 sensor entity (numeric).
-      default: none
+      default: []
       selector:
         entity:
           filter:
@@ -92,7 +106,7 @@ blueprint:
     aqi_sensor:
       name: Air Quality Summary Sensor
       description: Select the general "Air Quality" sensor entity (string-based).
-      default: none
+      default: []
       selector:
         entity:
           filter:
@@ -146,21 +160,12 @@ blueprint:
       default: []
       selector:
         action: {}
-    stabilization_time:
-      name: Air Quality Stabilization
-      description: "How long the Air Quality Summary must stay in a new state before triggering. (Prevents flapping). Set to 0 for instant."
-      default: 0
-      selector:
-        number:
-          min: 0
-          max: 3600
-          unit_of_measurement: "sec"
 
     # Temperature Settings
     temp_sensor:
       name: Temperature Sensor
       description: Select the temperature sensor entity.
-      default: none
+      default: []
       selector:
         entity:
           filter:
@@ -198,7 +203,7 @@ blueprint:
     humidity_sensor:
       name: Humidity Sensor
       description: Select the humidity sensor entity.
-      default: none
+      default: []
       selector:
         entity:
           filter:
@@ -244,28 +249,36 @@ trigger_variables:
   pm25_low_threshold_input: !input pm25_low_threshold
   aqi_trigger_states_input: !input aqi_trigger_states
   aqi_low_states_input: !input aqi_low_states
+  stabilization_time_input: !input stabilization_time
   temp_high_threshold_input: !input temp_high_threshold
   temp_low_threshold_input: !input temp_low_threshold
   humidity_high_threshold_input: !input humidity_high_threshold
   humidity_low_threshold_input: !input humidity_low_threshold
-  stabilization_time_input: !input stabilization_time
 
 triggers:
   - trigger: numeric_state
     entity_id: !input co2_sensor
     above: !input co2_high_threshold
+    for:
+      seconds: !input stabilization_time
     id: co2_high
   - trigger: numeric_state
     entity_id: !input co2_sensor
     below: !input co2_low_threshold
+    for:
+      seconds: !input stabilization_time
     id: co2_low
   - trigger: numeric_state
     entity_id: !input pm25_sensor
     above: !input pm25_high_threshold
+    for:
+      seconds: !input stabilization_time
     id: pm25_high
   - trigger: numeric_state
     entity_id: !input pm25_sensor
     below: !input pm25_low_threshold
+    for:
+      seconds: !input stabilization_time
     id: pm25_low
   - trigger: state
     entity_id: !input aqi_sensor
@@ -282,18 +295,26 @@ triggers:
   - trigger: numeric_state
     entity_id: !input temp_sensor
     above: !input temp_high_threshold
+    for:
+      seconds: !input stabilization_time
     id: temp_high
   - trigger: numeric_state
     entity_id: !input temp_sensor
     below: !input temp_low_threshold
+    for:
+      seconds: !input stabilization_time
     id: temp_low
   - trigger: numeric_state
     entity_id: !input humidity_sensor
     above: !input humidity_high_threshold
+    for:
+      seconds: !input stabilization_time
     id: humidity_high
   - trigger: numeric_state
     entity_id: !input humidity_sensor
     below: !input humidity_low_threshold
+    for:
+      seconds: !input stabilization_time
     id: humidity_low
 
 actions:
@@ -301,40 +322,76 @@ actions:
       - conditions:
           - condition: trigger
             id: co2_high
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] and
+                 (trigger.from_state.state | float(0)) <= (co2_high_threshold_input | float) }}
         sequence: !input action_co2_high
       - conditions:
           - condition: trigger
             id: co2_low
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] and
+                 (trigger.from_state.state | float(5000)) >= (co2_low_threshold_input | float) }}
         sequence: !input action_co2_low
       - conditions:
           - condition: trigger
             id: pm25_high
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] and
+                 (trigger.from_state.state | float(0)) <= (pm25_high_threshold_input | float) }}
         sequence: !input action_pm25_high
       - conditions:
           - condition: trigger
             id: pm25_low
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] and
+                 (trigger.from_state.state | float(1000)) >= (pm25_low_threshold_input | float) }}
         sequence: !input action_pm25_low
       - conditions:
           - condition: trigger
             id: aqi_high
+          - condition: template
+            value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] }}"
         sequence: !input action_aqi_high
       - conditions:
           - condition: trigger
             id: aqi_low
+          - condition: template
+            value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] }}"
         sequence: !input action_aqi_low
       - conditions:
           - condition: trigger
             id: temp_high
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] and
+                 (trigger.from_state.state | float(0)) <= (temp_high_threshold_input | float) }}
         sequence: !input action_temp_high
       - conditions:
           - condition: trigger
             id: temp_low
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] and
+                 (trigger.from_state.state | float(100)) >= (temp_low_threshold_input | float) }}
         sequence: !input action_temp_low
       - conditions:
           - condition: trigger
             id: humidity_high
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] and
+                 (trigger.from_state.state | float(0)) <= (humidity_high_threshold_input | float) }}
         sequence: !input action_humidity_high
       - conditions:
           - condition: trigger
             id: humidity_low
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] and
+                 (trigger.from_state.state | float(100)) >= (humidity_low_threshold_input | float) }}
         sequence: !input action_humidity_low

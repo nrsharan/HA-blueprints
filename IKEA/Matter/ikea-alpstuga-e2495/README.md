@@ -59,6 +59,14 @@ If you are receiving too many notifications in a short time, it's usually caused
 Licensed under the **MIT License**.
 
 ---
+### ⚠️ Troubleshooting
+### ⚠️ Troubleshooting
+**Preventing Repeated Actions?**
+If you notice actions firing multiple times (e.g., your ventilation toggling on/off or receiving duplicate alerts) even when the air quality is stable, this blueprint has robust filtering built-in:
+*   **Strict Logic**: Actions only trigger if the value actually **crosses** the threshold. If CO2 drops from 798 to 797 (both below the default 800 limit), the automation ignores it.
+*   **Blip Filtering**: Brief "Unavailable" states from the sensor are automatically filtered out.
+*   **Optimization**: Use the **Action Trigger Stabilization Time** (e.g., 30s) to further smooth out noisy data. This ensures your siren or fan doesn't toggle rapidly due to minor sensor fluctuations.
+
 ### 🔗 More Blueprints & Community
 Check out my other blueprints for IKEA Matter devices on the Home Assistant Community:
 

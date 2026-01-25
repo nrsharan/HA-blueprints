@@ -37,6 +37,13 @@ If the button above doesn't work, you can copy the URL below and paste it into t
 Licensed under the **MIT License**.
 
 ---
+### ⚠️ Troubleshooting
+**Preventing Repeated Actions?**
+If you notice actions firing multiple times (e.g., your fan toggling on/off) even when temperature/humidity is stable, this blueprint has robust filtering built-in:
+*   **Strict Logic**: Actions only trigger if the value actually **crosses** the threshold. If humidity drops from 69% to 68% (both below 70%), it will be ignored.
+*   **Blip Filtering**: Brief "Unavailable" states from the sensor are automatically filtered out.
+*   **Optimization**: Use the **Action Trigger Stabilization Time** (e.g., 30s) to further smooth out noisy data.
+
 ### 🔗 More Blueprints & Community
 Check out my other blueprints for IKEA Matter devices on the Home Assistant Community:
 

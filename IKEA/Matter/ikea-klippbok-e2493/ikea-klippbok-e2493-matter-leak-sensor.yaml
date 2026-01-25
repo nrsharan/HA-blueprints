@@ -67,7 +67,7 @@ blueprint:
     battery_entity:
       name: (Optional) Battery Sensor
       description: Select the battery level sensor (sensor.battery).
-      default: none
+      default: []
       selector:
         entity:
           filter:

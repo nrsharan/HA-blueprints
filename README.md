@@ -34,7 +34,3 @@ Click on a blueprint name to view its detailed documentation and forum post cont
 
 ## 🔗 Community & Links
 *   **[Search all my blueprints on HA Community](https://community.home-assistant.io/search?q=@aledziko%20#blueprints-exchange)**
-
----
-> [!TIP]
-> Each blueprint folder contains a `README.md` which is pre-formatted for use in the Home Assistant Community "Blueprints Exchange" forum.

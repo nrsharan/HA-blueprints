@@ -8,10 +8,25 @@ blueprint:
   source_url: https://github.com/aledziko/HA-blueprints/blob/main/IKEA/Matter/ikea-timmerflotte-e2314/ikea-timmerflotte-e2314-matter-temp-humidity-sensor.yaml
   author: aledziko
   input:
+    # Global Settings
+    stabilization_time:
+      name: Action Trigger Stabilization Time
+      description: >
+        **Prevent Action Repetition**: This setting ensures the sensor must stay in the new state for X seconds before triggering any action.
+        It filters out brief fluctuations and connection drops (unavailable) that would otherwise cause the same action to run multiple times.
+        Recommended: 15-60 seconds.
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: "sec"
+
     # Temperature Settings
     temp_sensor:
       name: Temperature Sensor
       description: Select the temperature sensor entity.
+      default: []
       selector:
         entity:
           filter:
@@ -53,6 +68,7 @@ blueprint:
     humidity_sensor:
       name: Humidity Sensor
       description: Select the humidity sensor entity.
+      default: []
       selector:
         entity:
           filter:
@@ -94,7 +110,7 @@ blueprint:
     battery_entity:
       name: (Optional) Battery Sensor
       description: Select the battery level sensor.
-      default: none
+      default: []
       selector:
         entity:
           filter:
@@ -125,23 +141,32 @@ trigger_variables:
   humidity_low_threshold_input: !input humidity_low_threshold
   battery_entity_input: !input battery_entity
   battery_threshold_input: !input battery_low_threshold
+  stabilization_time_input: !input stabilization_time
 
 triggers:
   - trigger: numeric_state
     entity_id: !input temp_sensor
     above: !input temp_high_threshold
+    for:
+      seconds: !input stabilization_time
     id: temp_high
   - trigger: numeric_state
     entity_id: !input temp_sensor
     below: !input temp_low_threshold
+    for:
+      seconds: !input stabilization_time
     id: temp_low
   - trigger: numeric_state
     entity_id: !input humidity_sensor
     above: !input humidity_high_threshold
+    for:
+      seconds: !input stabilization_time
     id: humidity_high
   - trigger: numeric_state
     entity_id: !input humidity_sensor
     below: !input humidity_low_threshold
+    for:
+      seconds: !input stabilization_time
     id: humidity_low
   - trigger: template
     value_template: >
@@ -155,18 +180,34 @@ actions:
       - conditions:
           - condition: trigger
             id: temp_high
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] and 
+                 (trigger.from_state.state | float(0)) <= (temp_high_threshold_input | float) }}
         sequence: !input action_temp_high
       - conditions:
           - condition: trigger
             id: temp_low
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] and 
+                 (trigger.from_state.state | float(100)) >= (temp_low_threshold_input | float) }}
         sequence: !input action_temp_low
       - conditions:
           - condition: trigger
             id: humidity_high
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] and 
+                 (trigger.from_state.state | float(0)) <= (humidity_high_threshold_input | float) }}
         sequence: !input action_humidity_high
       - conditions:
           - condition: trigger
             id: humidity_low
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state.state not in ['unavailable', 'unknown', 'none'] and 
+                 (trigger.from_state.state | float(100)) >= (humidity_low_threshold_input | float) }}
         sequence: !input action_humidity_low
       - conditions:
           - condition: trigger
