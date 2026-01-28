@@ -17,6 +17,7 @@ If the button above doesn't work, you can copy the URL below and paste it into t
 *   **Dual-Phase Actions**: Set numeric cutoffs (CO2, PM2.5, Temp, Humidity) or state lists (AQI Summary) for both "Alert" and "Normal" phases. This allows you to start and stop devices automatically as conditions change.
 *   **Stabilization Time**: Prevent notification "flapping" by requiring states to remain active for a configurable duration (e.g., 30 seconds).
 *   **Parallel Execution**: Handles multiple environmental shifts concurrently (e.g., boosting the air purifier while notifying about high CO2).
+*   **Time Window Control**: Optional toggle to restrict the automation to specific hours (e.g., 8:00 AM - 10:00 PM), perfect for sleeping hours.
 
 ## 💡 Example Use Cases
 

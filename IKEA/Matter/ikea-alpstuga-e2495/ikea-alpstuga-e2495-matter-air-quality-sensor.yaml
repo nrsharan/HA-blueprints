@@ -21,6 +21,25 @@ blueprint:
           min: 0
           max: 3600
           unit_of_measurement: "sec"
+    
+    use_time_window:
+      name: Enable Active Hours?
+      description: Restrict automation to a specific time window.
+      default: false
+      selector:
+        boolean: {}
+    active_start_time:
+      name: Active Start Time
+      description: Automation starts working at this time (if enabled).
+      default: "08:00:00"
+      selector:
+        time: {}
+    active_end_time:
+      name: Active End Time
+      description: Automation stops working at this time (if enabled).
+      default: "22:00:00"
+      selector:
+        time: {}
 
     # CO2 Settings
     co2_sensor:
@@ -250,6 +269,7 @@ trigger_variables:
   aqi_trigger_states_input: !input aqi_trigger_states
   aqi_low_states_input: !input aqi_low_states
   stabilization_time_input: !input stabilization_time
+  use_time_window_input: !input use_time_window
   temp_high_threshold_input: !input temp_high_threshold
   temp_low_threshold_input: !input temp_low_threshold
   humidity_high_threshold_input: !input humidity_high_threshold
@@ -316,6 +336,16 @@ triggers:
     for:
       seconds: !input stabilization_time
     id: humidity_low
+
+
+condition:
+  - condition: or
+    conditions:
+      - condition: template
+        value_template: "{{ not use_time_window_input }}"
+      - condition: time
+        after: !input active_start_time
+        before: !input active_end_time
 
 actions:
   - choose:
