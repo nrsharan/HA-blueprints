@@ -147,6 +147,15 @@ blueprint:
           min: 0
           max: 3000
           unit_of_measurement: lux
+    brightness_high_duration:
+      name: (Optional) Brightness High Duration
+      description: How long brightness must stay above cutoff before auto turn-off (prevents spurious spikes).
+      default: 60
+      selector:
+        number:
+          min: 0
+          max: 600
+          unit_of_measurement: seconds
     # illuminance_high_threshold:
     #   name: (Optional) Light High Threshold
     #   description: Trigger "High Action" when LUX goes ABOVE this value (e.g. 500 lx).
@@ -229,6 +238,8 @@ triggers:
          motion_cutoff_input != 0 and
          states(illuminance_entity_input) | is_number and 
          states(illuminance_entity_input) | float(0) > (motion_cutoff_input | float) }}
+    for:
+      seconds: !input brightness_high_duration
     id: brightness_exceeded
   # Template triggers for optional entities
   # - trigger: template
