@@ -4,8 +4,8 @@ blueprint:
     Supports independent actions for motion, illuminance (high/low), and battery alerts.
     '
   domain: automation
-  source_url: https://github.com/aledziko/HA-blueprints/blob/main/IKEA/Matter/ikea-myggspray-e2494/ikea-myggspray-e2494-matter-motion-sensor.yaml
-  author: aledziko
+  source_url: https://github.com/nrsharan/HA-blueprints/blob/main/IKEA/Matter/ikea-myggspray-e2494/ikea-myggspray-e2494-matter-motion-sensor.yaml
+  author: nrsharan
   input:
     # Motion Settings
     motion_entity:
@@ -19,32 +19,101 @@ blueprint:
             - device_class: motion
               domain: binary_sensor
     
-    use_time_window:
-      name: Enable Active Hours?
-      description: Restrict automation to a specific time window.
-      default: false
-      selector:
-        boolean: {}
-    active_start_time:
-      name: Active Start Time
-      description: Automation starts working at this time (if enabled).
-      default: "08:00:00"
-      selector:
-        time: {}
-    active_end_time:
-      name: Active End Time
-      description: Automation stops working at this time (if enabled).
-      default: "22:00:00"
-      selector:
-        time: {}
     no_motion_wait:
-      name: Wait time (Motion)
-      description: Time to wait after last motion is detected before running the "off" action.
+      name: Default Wait Time
+      description: Default time to wait after motion stops (used when no time period matches).
       default: 120
       selector:
         number:
           min: 0
           max: 3600
+          unit_of_measurement: seconds
+    
+    # Time Period 1 (e.g., Evening)
+    enable_period_1:
+      name: Enable Time Period 1?
+      description: Enable custom wait time for time period 1 (e.g., Evening mode).
+      default: false
+      selector:
+        boolean: {}
+    period_1_start:
+      name: Period 1 Start Time
+      description: Start time for period 1.
+      default: "18:00:00"
+      selector:
+        time: {}
+    period_1_end:
+      name: Period 1 End Time
+      description: End time for period 1.
+      default: "22:00:00"
+      selector:
+        time: {}
+    period_1_wait:
+      name: Period 1 Wait Time
+      description: Wait time during period 1 (e.g., longer for evening).
+      default: 300
+      selector:
+        number:
+          min: 0
+          max: 7200
+          unit_of_measurement: seconds
+    
+    # Time Period 2 (e.g., Night)
+    enable_period_2:
+      name: Enable Time Period 2?
+      description: Enable custom wait time for time period 2 (e.g., Night mode).
+      default: false
+      selector:
+        boolean: {}
+    period_2_start:
+      name: Period 2 Start Time
+      description: Start time for period 2.
+      default: "22:00:00"
+      selector:
+        time: {}
+    period_2_end:
+      name: Period 2 End Time
+      description: End time for period 2.
+      default: "06:00:00"
+      selector:
+        time: {}
+    period_2_wait:
+      name: Period 2 Wait Time
+      description: Wait time during period 2 (e.g., shorter for night).
+      default: 30
+      selector:
+        number:
+          min: 0
+          max: 7200
+          unit_of_measurement: seconds
+    
+    # Time Period 3 (e.g., Morning)
+    enable_period_3:
+      name: Enable Time Period 3?
+      description: Enable custom wait time for time period 3 (e.g., Morning mode).
+      default: false
+      selector:
+        boolean: {}
+    period_3_start:
+      name: Period 3 Start Time
+      description: Start time for period 3.
+      default: "06:00:00"
+      selector:
+        time: {}
+    period_3_end:
+      name: Period 3 End Time
+      description: End time for period 3.
+      default: "09:00:00"
+      selector:
+        time: {}
+    period_3_wait:
+      name: Period 3 Wait Time
+      description: Wait time during period 3.
+      default: 60
+      selector:
+        number:
+          min: 0
+          max: 7200
           unit_of_measurement: seconds
     motion_on_action:
       name: "Action: Motion Detected"
@@ -78,62 +147,62 @@ blueprint:
           min: 0
           max: 3000
           unit_of_measurement: lux
-    illuminance_high_threshold:
-      name: (Optional) Light High Threshold
-      description: Trigger "High Action" when LUX goes ABOVE this value (e.g. 500 lx).
-      default: 500
-      selector:
-        number:
-          min: 0
-          max: 3000
-          unit_of_measurement: lux
-    high_action:
-      name: "Action: Light High"
-      description: Run when light exceeds threshold (e.g. close curtains).
-      default: []
-      selector:
-        action: {}
-    illuminance_low_threshold:
-      name: (Optional) Light Low Threshold
-      description: Trigger "Low Action" when LUX goes BELOW this value (e.g. 5 lx).
-      default: 5
-      selector:
-        number:
-          min: 0
-          max: 3000
-          unit_of_measurement: lux
-    low_action:
-      name: "Action: Light Low"
-      description: Run when light drops below threshold (e.g. open curtains).
-      default: []
-      selector:
-        action: {}
+    # illuminance_high_threshold:
+    #   name: (Optional) Light High Threshold
+    #   description: Trigger "High Action" when LUX goes ABOVE this value (e.g. 500 lx).
+    #   default: 500
+    #   selector:
+    #     number:
+    #       min: 0
+    #       max: 3000
+    #       unit_of_measurement: lux
+    # high_action:
+    #   name: "Action: Light High"
+    #   description: Run when light exceeds threshold (e.g. close curtains).
+    #   default: []
+    #   selector:
+    #     action: {}
+    # illuminance_low_threshold:
+    #   name: (Optional) Light Low Threshold
+    #   description: Trigger "Low Action" when LUX goes BELOW this value (e.g. 5 lx).
+    #   default: 5
+    #   selector:
+    #     number:
+    #       min: 0
+    #       max: 3000
+    #       unit_of_measurement: lux
+    # low_action:
+    #   name: "Action: Light Low"
+    #   description: Run when light drops below threshold (e.g. open curtains).
+    #   default: []
+    #   selector:
+    #     action: {}
 
-    # Battery Settings
-    battery_entity:
-      name: (Optional) Battery Sensor
-      description: Select the battery level sensor (sensor.battery).
-      default: []
-      selector:
-        entity:
-          filter:
-            domain: sensor
-            device_class: battery
-    battery_low_threshold:
-      name: (Optional) Battery Low Level
-      description: Threshold for battery alert (%).
-      default: 30
-      selector:
-        number:
-          min: 0
-          max: 100
-          unit_of_measurement: "%"
-    battery_low_action:
-      name: "Action: Battery Low"
-      description: Run when battery drops below threshold.
-      default: []
-      selector:
-        action: {}
+    # # Battery Settings
+    # battery_entity:
+    #   name: (Optional) Battery Sensor
+    #   description: Select the battery level sensor (sensor.battery).
+    #   default: []
+    #   selector:
+    #     entity:
+    #       filter:
+    #         domain: sensor
+    #         device_class: battery
+    # battery_low_threshold:
+    #   name: (Optional) Battery Low Level
+    #   description: Threshold for battery alert (%).
+    #   default: 30
+    #   selector:
+    #     number:
+    #       min: 0
+    #       max: 100
+    #       unit_of_measurement: "%"
+    # battery_low_action:
+    #   name: "Action: Battery Low"
+    #   description: Run when battery drops below threshold.
+    #   default: []
+    #   selector:
+    #     action: {}
 
 # Parallel mode allows motion timers and battery/light alerts to run concurrently.
 mode: restart
@@ -142,11 +211,10 @@ trigger_variables:
   motion_entity_input: !input motion_entity
   illuminance_entity_input: !input illuminance_entity
   motion_cutoff_input: !input motion_cutoff
-  high_threshold_input: !input illuminance_high_threshold
-  low_threshold_input: !input illuminance_low_threshold
-  battery_entity_input: !input battery_entity
-  battery_threshold_input: !input battery_low_threshold
-  use_time_window_input: !input use_time_window
+  # high_threshold_input: !input illuminance_high_threshold
+  # low_threshold_input: !input illuminance_low_threshold
+  # battery_entity_input: !input battery_entity
+  # battery_threshold_input: !input battery_low_threshold
 
 triggers:
   - trigger: state
@@ -154,34 +222,35 @@ triggers:
     from: "off"
     to: "on"
     id: motion_detected
+  # Trigger when brightness exceeds cutoff (auto turn off lights)
+  - trigger: template
+    value_template: >
+      {{ illuminance_entity_input not in [none, [], ''] and 
+         motion_cutoff_input != 0 and
+         states(illuminance_entity_input) | is_number and 
+         states(illuminance_entity_input) | float(0) > (motion_cutoff_input | float) }}
+    id: brightness_exceeded
   # Template triggers for optional entities
-  - trigger: template
-    value_template: >
-      {{ illuminance_entity_input != none and 
-         states(illuminance_entity_input) | is_number and 
-         states(illuminance_entity_input) | float(0) > high_threshold_input | float(100000) }}
-    id: light_high
-  - trigger: template
-    value_template: >
-      {{ illuminance_entity_input != none and 
-         states(illuminance_entity_input) | is_number and 
-         states(illuminance_entity_input) | float(100000) < low_threshold_input | float(-1) }}
-    id: light_low
-  - trigger: template
-    value_template: >
-      {{ battery_entity_input != none and 
-         states(battery_entity_input) | is_number and 
-         states(battery_entity_input) | float(100) < battery_threshold_input | float(-1) }}
-    id: battery_low
+  # - trigger: template
+  #   value_template: >
+  #     {{ illuminance_entity_input != none and 
+  #        states(illuminance_entity_input) | is_number and 
+  #        states(illuminance_entity_input) | float(0) > high_threshold_input | float(100000) }}
+  #   id: light_high
+  # - trigger: template
+  #   value_template: >
+  #     {{ illuminance_entity_input != none and 
+  #        states(illuminance_entity_input) | is_number and 
+  #        states(illuminance_entity_input) | float(100000) < low_threshold_input | float(-1) }}
+  #   id: light_low
+  # - trigger: template
+  #   value_template: >
+  #     {{ battery_entity_input != none and 
+  #        states(battery_entity_input) | is_number and 
+  #        states(battery_entity_input) | float(100) < battery_threshold_input | float(-1) }}
+  #   id: battery_low
 
-condition:
-  - condition: or
-    conditions:
-      - condition: template
-        value_template: "{{ not use_time_window_input }}"
-      - condition: time
-        after: !input active_start_time
-        before: !input active_end_time
+condition: []
 
 actions:
   - choose:
@@ -189,15 +258,15 @@ actions:
       - conditions:
           - condition: trigger
             id: motion_detected
+        sequence:
           - condition: or
             conditions:
               - condition: template
-                value_template: "{{ illuminance_entity_input == none or states(illuminance_entity_input) in ['unknown', 'unavailable', 'none'] }}"
+                value_template: "{{ illuminance_entity_input in [none, [], ''] or states(illuminance_entity_input) in ['unknown', 'unavailable', 'none'] }}"
               - condition: template
                 value_template: "{{ motion_cutoff_input == 0 }}"
               - condition: template
                 value_template: "{{ states(illuminance_entity_input) | float(99999) <= (motion_cutoff_input | float) }}"
-        sequence:
           - choose: []
             default: !input motion_on_action
           - wait_for_trigger:
@@ -205,27 +274,68 @@ actions:
                 entity_id: !input motion_entity
                 from: "on"
                 to: "off"
-          - delay: !input no_motion_wait
+          # Determine which wait time to use based on current time
+          - variables:
+              enable_p1: !input enable_period_1
+              period_1_start: !input period_1_start
+              period_1_end: !input period_1_end
+              period_1_wait: !input period_1_wait
+              enable_p2: !input enable_period_2
+              period_2_start: !input period_2_start
+              period_2_end: !input period_2_end
+              period_2_wait: !input period_2_wait
+              enable_p3: !input enable_period_3
+              period_3_start: !input period_3_start
+              period_3_end: !input period_3_end
+              period_3_wait: !input period_3_wait
+              default_wait: !input no_motion_wait
+              wait_time: >
+                {% set now_time = now().strftime('%H:%M:%S') %}
+                {% macro in_period(start, end, current) %}
+                  {% if start <= end %}
+                    {{ start <= current < end }}
+                  {% else %}
+                    {{ start <= current or current < end }}
+                  {% endif %}
+                {% endmacro %}
+                {% if enable_p1 and in_period(period_1_start, period_1_end, now_time) | trim == 'True' %}
+                  {{ period_1_wait }}
+                {% elif enable_p2 and in_period(period_2_start, period_2_end, now_time) | trim == 'True' %}
+                  {{ period_2_wait }}
+                {% elif enable_p3 and in_period(period_3_start, period_3_end, now_time) | trim == 'True' %}
+                  {{ period_3_wait }}
+                {% else %}
+                  {{ default_wait }}
+                {% endif %}
+          - delay: "{{ wait_time }}"
           # Safety check: Only turn off if the sensor is STILL currently 'off'
           - condition: template
             value_template: "{{ is_state(motion_entity_input, 'off') }}"
           - choose: []
             default: !input motion_off_action
 
-      # LIGHT HIGH
+      # BRIGHTNESS EXCEEDED - Auto turn off lights when too bright
       - conditions:
           - condition: trigger
-            id: light_high
-        sequence: !input high_action
+            id: brightness_exceeded
+        sequence:
+          - choose: []
+            default: !input motion_off_action
 
-      # LIGHT LOW
-      - conditions:
-          - condition: trigger
-            id: light_low
-        sequence: !input low_action
+      # # LIGHT HIGH
+      # - conditions:
+      #     - condition: trigger
+      #       id: light_high
+      #   sequence: !input high_action
 
-      # BATTERY LOW
-      - conditions:
-          - condition: trigger
-            id: battery_low
-        sequence: !input battery_low_action
+      # # LIGHT LOW
+      # - conditions:
+      #     - condition: trigger
+      #       id: light_low
+      #   sequence: !input low_action
+
+      # # BATTERY LOW
+      # - conditions:
+      #     - condition: trigger
+      #       id: battery_low
+      #   sequence: !input battery_low_action
