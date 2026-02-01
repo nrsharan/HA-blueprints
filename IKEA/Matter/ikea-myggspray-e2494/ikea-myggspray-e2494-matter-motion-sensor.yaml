@@ -136,8 +136,7 @@ blueprint:
         action: {}
 
 # Parallel mode allows motion timers and battery/light alerts to run concurrently.
-mode: parallel
-max_exceeded: silent
+mode: restart
 
 trigger_variables:
   motion_entity_input: !input motion_entity
