@@ -230,17 +230,12 @@ triggers:
     entity_id: !input motion_entity
     from: "off"
     to: "on"
-    id: motion_detected
-  # Trigger when brightness exceeds cutoff (auto turn off lights)
-  - trigger: template
-    value_template: >
-      {{ illuminance_entity_input not in [none, [], ''] and 
-         motion_cutoff_input != 0 and
-         states(illuminance_entity_input) | is_number and 
-         states(illuminance_entity_input) | float(0) > (motion_cutoff_input | float) }}
-    for:
-      seconds: !input brightness_high_duration
-    id: brightness_exceeded
+    id: motion_on
+  - trigger: state
+    entity_id: !input motion_entity
+    from: "on"
+    to: "off"
+    id: motion_off
   # Template triggers for optional entities
   # - trigger: template
   #   value_template: >
@@ -265,10 +260,10 @@ condition: []
 
 actions:
   - choose:
-      # MOTION DETECTED
+      # MOTION DETECTED - Check brightness and turn on if dark enough
       - conditions:
           - condition: trigger
-            id: motion_detected
+            id: motion_on
         sequence:
           - condition: or
             conditions:
@@ -280,12 +275,12 @@ actions:
                 value_template: "{{ states(illuminance_entity_input) | float(99999) <= (motion_cutoff_input | float) }}"
           - choose: []
             default: !input motion_on_action
-          - wait_for_trigger:
-              - trigger: state
-                entity_id: !input motion_entity
-                from: "on"
-                to: "off"
-          # Determine which wait time to use based on current time
+
+      # MOTION STOPPED - Wait for configured time period, then turn off
+      - conditions:
+          - condition: trigger
+            id: motion_off
+        sequence:
           - variables:
               enable_p1: !input enable_period_1
               period_1_start: !input period_1_start
@@ -319,34 +314,5 @@ actions:
                   {{ default_wait }}
                 {% endif %}
           - delay: "{{ wait_time }}"
-          # Safety check: Only turn off if the sensor is STILL currently 'off'
-          - condition: template
-            value_template: "{{ is_state(motion_entity_input, 'off') }}"
           - choose: []
             default: !input motion_off_action
-
-      # BRIGHTNESS EXCEEDED - Auto turn off lights when too bright
-      - conditions:
-          - condition: trigger
-            id: brightness_exceeded
-        sequence:
-          - choose: []
-            default: !input motion_off_action
-
-      # # LIGHT HIGH
-      # - conditions:
-      #     - condition: trigger
-      #       id: light_high
-      #   sequence: !input high_action
-
-      # # LIGHT LOW
-      # - conditions:
-      #     - condition: trigger
-      #       id: light_low
-      #   sequence: !input low_action
-
-      # # BATTERY LOW
-      # - conditions:
-      #     - condition: trigger
-      #       id: battery_low
-      #   sequence: !input battery_low_action
