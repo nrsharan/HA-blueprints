@@ -171,14 +171,17 @@ actions:
           - condition: trigger
             id: motion_on
         sequence:
+          - variables:
+              illuminance_entity: !input illuminance_entity
+              motion_cutoff: !input motion_cutoff
           - condition: or
             conditions:
               - condition: template
-                value_template: "{% set lux_sensor = !input illuminance_entity %}{{ lux_sensor in [none, [], ''] or states(lux_sensor) in ['unknown', 'unavailable', 'none'] }}"
+                value_template: "{{ illuminance_entity in [none, [], ''] or states(illuminance_entity) in ['unknown', 'unavailable', 'none'] }}"
               - condition: template
-                value_template: "{{ (!input motion_cutoff) == 0 }}"
+                value_template: "{{ motion_cutoff == 0 }}"
               - condition: template
-                value_template: "{% set lux_sensor = !input illuminance_entity %}{% set cutoff = !input motion_cutoff %}{{ states(lux_sensor) | float(99999) <= (cutoff | float) }}"
+                value_template: "{{ states(illuminance_entity) | float(99999) <= (motion_cutoff | float) }}"
           - choose: []
             default: !input motion_on_action
 
