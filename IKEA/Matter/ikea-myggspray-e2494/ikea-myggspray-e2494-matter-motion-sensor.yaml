@@ -1,7 +1,6 @@
 blueprint:
-  name: IKEA MYGGSPRAY E2494 Motion Sensor (Matter) v2.0
-  description: 'Full-featured automation for the IKEA MYGGSPRAY E2494 Matter motion sensor. 
-    Supports independent actions for motion, illuminance (high/low), and battery alerts.
+  name: IKEA MYGGSPRAY E2494 Motion Sensor (Matter) v2.1
+  description: 'Automation for the IKEA MYGGSPRAY E2494 Matter motion sensor with motion-triggered actions and illuminance threshold support.
     '
   domain: automation
   source_url: https://github.com/nrsharan/HA-blueprints/blob/main/IKEA/Matter/ikea-myggspray-e2494/ikea-myggspray-e2494-matter-motion-sensor.yaml
@@ -147,83 +146,14 @@ blueprint:
           min: 0
           max: 3000
           unit_of_measurement: lux
-    brightness_high_duration:
-      name: (Optional) Brightness High Duration
-      description: How long brightness must stay above cutoff before auto turn-off (prevents spurious spikes).
-      default: 60
-      selector:
-        number:
-          min: 0
-          max: 600
-          unit_of_measurement: seconds
-    # illuminance_high_threshold:
-    #   name: (Optional) Light High Threshold
-    #   description: Trigger "High Action" when LUX goes ABOVE this value (e.g. 500 lx).
-    #   default: 500
-    #   selector:
-    #     number:
-    #       min: 0
-    #       max: 3000
-    #       unit_of_measurement: lux
-    # high_action:
-    #   name: "Action: Light High"
-    #   description: Run when light exceeds threshold (e.g. close curtains).
-    #   default: []
-    #   selector:
-    #     action: {}
-    # illuminance_low_threshold:
-    #   name: (Optional) Light Low Threshold
-    #   description: Trigger "Low Action" when LUX goes BELOW this value (e.g. 5 lx).
-    #   default: 5
-    #   selector:
-    #     number:
-    #       min: 0
-    #       max: 3000
-    #       unit_of_measurement: lux
-    # low_action:
-    #   name: "Action: Light Low"
-    #   description: Run when light drops below threshold (e.g. open curtains).
-    #   default: []
-    #   selector:
-    #     action: {}
 
-    # # Battery Settings
-    # battery_entity:
-    #   name: (Optional) Battery Sensor
-    #   description: Select the battery level sensor (sensor.battery).
-    #   default: []
-    #   selector:
-    #     entity:
-    #       filter:
-    #         domain: sensor
-    #         device_class: battery
-    # battery_low_threshold:
-    #   name: (Optional) Battery Low Level
-    #   description: Threshold for battery alert (%).
-    #   default: 30
-    #   selector:
-    #     number:
-    #       min: 0
-    #       max: 100
-    #       unit_of_measurement: "%"
-    # battery_low_action:
-    #   name: "Action: Battery Low"
-    #   description: Run when battery drops below threshold.
-    #   default: []
-    #   selector:
-    #     action: {}
-
-# Parallel mode allows motion timers and battery/light alerts to run concurrently.
+# Restart mode allows new motion events to cancel ongoing sequences
 mode: restart
 
 trigger_variables:
   motion_entity_input: !input motion_entity
   illuminance_entity_input: !input illuminance_entity
   motion_cutoff_input: !input motion_cutoff
-  # high_threshold_input: !input illuminance_high_threshold
-  # low_threshold_input: !input illuminance_low_threshold
-  # battery_entity_input: !input battery_entity
-  # battery_threshold_input: !input battery_low_threshold
 
 triggers:
   - trigger: state
@@ -236,25 +166,6 @@ triggers:
     from: "on"
     to: "off"
     id: motion_off
-  # Template triggers for optional entities
-  # - trigger: template
-  #   value_template: >
-  #     {{ illuminance_entity_input != none and 
-  #        states(illuminance_entity_input) | is_number and 
-  #        states(illuminance_entity_input) | float(0) > high_threshold_input | float(100000) }}
-  #   id: light_high
-  # - trigger: template
-  #   value_template: >
-  #     {{ illuminance_entity_input != none and 
-  #        states(illuminance_entity_input) | is_number and 
-  #        states(illuminance_entity_input) | float(100000) < low_threshold_input | float(-1) }}
-  #   id: light_low
-  # - trigger: template
-  #   value_template: >
-  #     {{ battery_entity_input != none and 
-  #        states(battery_entity_input) | is_number and 
-  #        states(battery_entity_input) | float(100) < battery_threshold_input | float(-1) }}
-  #   id: battery_low
 
 condition: []
 
