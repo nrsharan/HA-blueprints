@@ -1,6 +1,6 @@
 blueprint:
   name: IKEA MYGGSPRAY E2494 Motion Sensor (Matter) v2.1
-  description: 'Automation for the IKEA MYGGSPRAY E2494 Matter motion sensor with motion-triggered actions and illuminance threshold support.
+  description: 'Motion-triggered automation with optional illuminance threshold. Runs actions when motion detected (if dark enough) and when motion stops after a configurable delay.
     '
   domain: automation
   source_url: https://github.com/nrsharan/HA-blueprints/blob/main/IKEA/Matter/ikea-myggspray-e2494/ikea-myggspray-e2494-matter-motion-sensor.yaml
@@ -20,7 +20,7 @@ blueprint:
     
     no_motion_wait:
       name: Default Wait Time
-      description: Default time to wait after motion stops (used when no time period matches).
+      description: Time to wait after motion stops before triggering the off action (used when no time period is active).
       default: 120
       selector:
         number:
@@ -116,13 +116,13 @@ blueprint:
           unit_of_measurement: seconds
     motion_on_action:
       name: "Action: Motion Detected"
-      description: Run when motion is detected (and dark enough).
+      description: Action to run when motion is detected. Only triggers if no illuminance sensor is configured, or if light level is below the motion cutoff threshold.
       default: []
       selector:
         action: {}
     motion_off_action:
       name: "Action: Motion Stopped"
-      description: Run after the sensor stops detecting motion and wait time elapsed.
+      description: Action to run after motion stops and the configured wait time has elapsed. Triggers regardless of light level.
       default: []
       selector:
         action: {}
@@ -130,7 +130,7 @@ blueprint:
     # Illuminance Settings
     illuminance_entity:
       name: (Optional) Illuminance Sensor
-      description: Select the light sensor (sensor.illuminance).
+      description: Light sensor to check before triggering motion detected action. Leave empty to disable brightness checking.
       default: []
       selector:
         entity:
@@ -139,7 +139,7 @@ blueprint:
             device_class: illuminance
     motion_cutoff:
       name: (Optional) Motion Light Cutoff
-      description: Only trigger "Motion Detected" action if LUX is BELOW this value (0 to disable).
+      description: Only trigger motion detected action when brightness is below this threshold (in lux). Set to 0 to disable brightness checking.
       default: 0
       selector:
         number:
