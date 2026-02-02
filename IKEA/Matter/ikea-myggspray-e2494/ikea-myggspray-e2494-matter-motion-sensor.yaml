@@ -150,11 +150,6 @@ blueprint:
 # Restart mode allows new motion events to cancel ongoing sequences
 mode: restart
 
-trigger_variables:
-  motion_entity_input: !input motion_entity
-  illuminance_entity_input: !input illuminance_entity
-  motion_cutoff_input: !input motion_cutoff
-
 triggers:
   - trigger: state
     entity_id: !input motion_entity
@@ -179,11 +174,11 @@ actions:
           - condition: or
             conditions:
               - condition: template
-                value_template: "{{ illuminance_entity_input in [none, [], ''] or states(illuminance_entity_input) in ['unknown', 'unavailable', 'none'] }}"
+                value_template: "{% set lux_sensor = !input illuminance_entity %}{{ lux_sensor in [none, [], ''] or states(lux_sensor) in ['unknown', 'unavailable', 'none'] }}"
               - condition: template
-                value_template: "{{ motion_cutoff_input == 0 }}"
+                value_template: "{{ (!input motion_cutoff) == 0 }}"
               - condition: template
-                value_template: "{{ states(illuminance_entity_input) | float(99999) <= (motion_cutoff_input | float) }}"
+                value_template: "{% set lux_sensor = !input illuminance_entity %}{% set cutoff = !input motion_cutoff %}{{ states(lux_sensor) | float(99999) <= (cutoff | float) }}"
           - choose: []
             default: !input motion_on_action
 
